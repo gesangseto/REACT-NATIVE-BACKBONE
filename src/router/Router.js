@@ -1,26 +1,27 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import splash_screen from '../screen/splash_screen';
-import login from '../screen/login';
-import home from '../screen/home';
+import SplashScreen from '../screen/SplashScreen';
+import Login from '../screen/Login';
+import MasterHome from '../screen/MasterHome';
 const Stack = createStackNavigator();
 const Router = () => {
   return (
     <Stack.Navigator initialRouteName="splash_screen">
       {/* <Stack.Navigator initialRouteName="MainApp"> */}
       <Stack.Screen
-        name="splash_screen"
-        component={splash_screen}
+        name="SplashScreen"
+        component={SplashScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="login"
-        component={login}
+        name="Login"
+        component={Login}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="home"
-        component={home}
+        name="MasterHome"
+        component={MasterHome}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -1,13 +1,14 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect} from 'react';
 import {ImageBackground, StyleSheet, View} from 'react-native';
 import {splash_screen_img} from '../assets';
 
-const splash_screen = ({navigation}) => {
+const SplashScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('login');
+      navigation.navigate('Login');
     }, 500);
-  }, []);
+  }, [navigation]);
 
   return (
     <>
@@ -26,12 +27,7 @@ const splash_screen = ({navigation}) => {
   );
 };
 
-// Define some colors and default sane values
-const utils = {
-  colors: {primaryColor: '#af0e66'},
-  dimensions: {defaultPadding: 12},
-  fonts: {largeFontSize: 18, mediumFontSize: 16, smallFontSize: 12},
-};
+export default React.memo(SplashScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -54,5 +50,3 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
-
-export default React.memo(splash_screen);

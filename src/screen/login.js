@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // <ROOT>/App/Views/Login/LoginView.js
 import React, {useRef, useState} from 'react';
 import {
@@ -9,13 +10,12 @@ import {
   View,
 } from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import IconMatCom from 'react-native-vector-icons/MaterialCommunityIcons';
 import {login_bottom, login_top} from '../assets';
 import {colors} from '../constants';
 
-const login = ({navigation}) => {
+const Login = ({navigation}) => {
   // const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const ref_input_email = useRef();
   const ref_input_password = useRef();
@@ -30,7 +30,7 @@ const login = ({navigation}) => {
   });
 
   const onPressLogin = () => {
-    navigation.navigate('home');
+    navigation.navigate('MasterHome');
   };
 
   return (
@@ -204,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(login);
+export default React.memo(Login);
