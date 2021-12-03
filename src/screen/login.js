@@ -1,6 +1,5 @@
 // <ROOT>/App/Views/Login/LoginView.js
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -12,10 +11,9 @@ import {
 import {getUniqueId} from 'react-native-device-info';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
+import IconMatCom from 'react-native-vector-icons/MaterialCommunityIcons';
 import {login_bottom, login_top} from '../assets';
 import {colors} from '../constants';
-import {checkDevice, loginUserV2} from '../resource';
-import IconMatCom from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const login = ({navigation}) => {
   // const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -31,61 +29,9 @@ const login = ({navigation}) => {
     password: '',
   });
 
-  const onPressLogin = async () => {
-    if (!isRegistered) {
-      return;
-    }
-    setIsLoading(true);
-    let result = await loginUserV2({
-      email: parameter.email,
-      password: parameter.password,
-    });
-    setIsLoading(false);
-    if (result) {
-      AsyncStorage.setItem('profile', JSON.stringify(result));
-      AsyncStorage.setItem('token', result.token);
-      setIsLogin(true);
-    }
+  const onPressLogin = () => {
+    navigation.navigate('home');
   };
-
-  useEffect(() => {
-    // const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-    //   setTimeout(() => {
-    //     setIsKeyboardOpen(true);
-    //   }, 1000);
-    // });
-    // const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-    //   setIsKeyboardOpen(false);
-    // });
-    if (isLogin) {
-      navigation.replace('menu_master');
-    }
-    if (initialLoad) {
-      (async function () {
-        if (await AsyncStorage.getItem('isRegistered')) {
-          setIsRegistered(true);
-        } else {
-          setIsLoading(true);
-          let result = await checkDevice({device_id: getUniqueId()});
-          setIsLoading(false);
-          if (result) {
-            await AsyncStorage.setItem('isRegistered', 'true');
-            setIsRegistered(true);
-          } else {
-            await AsyncStorage.removeItem('isRegistered');
-            setIsRegistered(false);
-          }
-          setInitialLoad(false);
-        }
-      })();
-      setInitialLoad(false);
-    }
-    return () => {
-      // showSubscription.remove();
-      // hideSubscription.remove();
-    };
-    // console.log(stateProfile.roleMenu);
-  }, [isLogin, isLoading, isRegistered]);
 
   return (
     <>
@@ -178,18 +124,9 @@ const login = ({navigation}) => {
                 )}
               </TouchableOpacity>
             </View>
-            {isRegistered && (
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={onPressLogin}>
-                <Text style={styles.loginButtonText}>LOGIN</Text>
-              </TouchableOpacity>
-            )}
-            {!initialLoad && !isRegistered && (
-              <TouchableWithoutFeedback style={styles.loginButton}>
-                <Text style={styles.loginButtonText}>LOGIN</Text>
-              </TouchableWithoutFeedback>
-            )}
+            <TouchableOpacity style={styles.loginButton} onPress={onPressLogin}>
+              <Text style={styles.loginButtonText}>LOGIN</Text>
+            </TouchableOpacity>
             {!initialLoad && !isRegistered && (
               <Text style={{color: 'red', textAlign: 'center'}}>
                 This device not registered for this application
@@ -209,8 +146,6 @@ const login = ({navigation}) => {
             style={{
               width: null,
               height: '105%',
-              // marginLeft: -5,
-              // marginBottom: -5,
             }}
           />
         </View>

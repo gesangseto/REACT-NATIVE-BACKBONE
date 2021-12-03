@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import splash_screen from '../screen/splash_screen';
 import login from '../screen/login';
-import profile from '../screen/profile';
+import home from '../screen/home';
 const Stack = createStackNavigator();
 const Router = () => {
   return (
@@ -19,8 +19,8 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="profile"
-        component={profile}
+        name="home"
+        component={home}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
