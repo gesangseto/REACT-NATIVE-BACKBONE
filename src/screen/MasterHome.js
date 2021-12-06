@@ -26,7 +26,7 @@ const MasterHome = ({route, navigation}) => {
           },
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Event"
         component={Event}
         options={{
@@ -44,7 +44,7 @@ const MasterHome = ({route, navigation}) => {
             );
           },
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Setting"
         component={Setting}

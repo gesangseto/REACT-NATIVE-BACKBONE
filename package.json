@@ -20,6 +20,7 @@
     "react-native": "0.66.3",
     "react-native-device-info": "^8.4.8",
     "react-native-gesture-handler": "^2.0.0",
+    "react-native-image-slider-box": "^1.1.11",
     "react-native-loading-spinner-overlay": "^2.0.0",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
