@@ -1,9 +1,10 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+// import Spinner from 'react-native-loading-spinner-overlay';
 import {Host} from 'react-native-portalize';
-import Icon from 'react-native-vector-icons/Octicons';
 import Toast from 'react-native-toast-notifications';
+import Icon from 'react-native-vector-icons/Octicons';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './redux';
@@ -83,6 +84,11 @@ const App = () => {
         <Host>
           <NavigationContainer>
             <Router />
+            {/* <Spinner
+              visible={true}
+              textContent={'Loading...'}
+              textStyle={{color: '#FFF'}}
+            /> */}
             <Toast
               ref={ref => (global['toast'] = ref)}
               offset={'45%'} // offset for both top and bottom toasts
@@ -100,3 +106,15 @@ const App = () => {
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    borderRadius: 5,
+    marginHorizontal: 50,
+    marginVertical: 5,
+    elevation: 10,
+  },
+});

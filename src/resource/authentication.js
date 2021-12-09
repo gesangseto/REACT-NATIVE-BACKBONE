@@ -1,20 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import $axios from '../apiMertrack';
+import $axios from '../Api';
 import {Toaster} from '../utils';
 
-export const loginUserV2 = async ({email = null, password = null}) => {
-  var body = {
-    ApiName: 'UserLogin',
-    Params: {
-      email: email,
-      password: password,
-    },
+export const loginUser = async ({params, property}) => {
+  let Params = {
+    user_name: params.user_name,
+    user_password: params.user_password,
   };
-  console.log(body);
+  console.log(Params);
   return new Promise(resolve => {
     $axios
-      .post(`/api/general/mobile`, body)
+      .post(`/api/login/user`, Params)
       .then(result => {
         if (result.data.error) {
           Toaster({message: `${result.data.message}`, type: 'error'});

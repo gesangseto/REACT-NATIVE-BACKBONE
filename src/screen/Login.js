@@ -10,14 +10,14 @@ import {
   View,
 } from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
-import Spinner from 'react-native-loading-spinner-overlay';
 import IconMatCom from 'react-native-vector-icons/MaterialCommunityIcons';
 import {login_bottom, login_top} from '../assets';
 import {colors} from '../constants';
+import {loginUser} from '../resource';
 
 const Login = ({navigation}) => {
   // const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const ref_input_email = useRef();
+  const ref_input_username = useRef();
   const ref_input_password = useRef();
   const [initialLoad, setInitialLoad] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,12 +25,13 @@ const Login = ({navigation}) => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [parameter, setParameter] = useState({
-    email: '',
-    password: '',
+    user_name: '',
+    user_password: '',
   });
 
-  const onPressLogin = () => {
-    navigation.navigate('MasterHome');
+  const onPressLogin = async () => {
+    await loginUser({params: parameter});
+    // navigation.navigate('MasterHome');
   };
 
   return (
@@ -47,24 +48,17 @@ const Login = ({navigation}) => {
         </View>
         <View style={{flex: 1, justifyContent: 'space-around'}}>
           <View style={styles.containerLogin}>
-            {isLoading && (
-              <Spinner
-                visible={true}
-                textContent={'Loading...'}
-                textStyle={{color: '#FFF'}}
-              />
-            )}
             <Text style={styles.loginText}>LOGIN</Text>
             <TextInput
-              ref={ref_input_email}
+              ref={ref_input_username}
               style={styles.input}
-              value={parameter.email}
+              value={parameter.user_name}
               maxLength={256}
               placeholder="Enter username..."
               autoCapitalize="none"
               autoCorrect={false}
               returnKeyType="next"
-              onChangeText={val => setParameter({...parameter, email: val})}
+              onChangeText={val => setParameter({...parameter, user_name: val})}
               underlineColorAndroid="transparent"
               placeholderTextColor="#999"
               onSubmitEditing={() => ref_input_password.current.focus()}
@@ -88,11 +82,11 @@ const Login = ({navigation}) => {
                   backgroundColor: 'white',
                   borderRadius: 8,
                 }}
-                value={parameter.password}
+                value={parameter.user_password}
                 maxLength={40}
                 placeholder="Enter password..."
                 onChangeText={val =>
-                  setParameter({...parameter, password: val})
+                  setParameter({...parameter, user_password: val})
                 }
                 autoCapitalize="none"
                 autoCorrect={false}
