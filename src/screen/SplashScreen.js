@@ -10,7 +10,7 @@ import {InputText} from '../component';
 const SplashScreen = ({navigation}) => {
   const modalAddApi = useRef(null);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [endpoint, setEndpoint] = useState('http://151.106.112.32:82');
+  const [endpoint, setEndpoint] = useState('http://151.106.112.32:8282');
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
@@ -58,7 +58,7 @@ const SplashScreen = ({navigation}) => {
             required
             defaultText={endpoint}
             onChange={val => setEndpoint(val)}
-            placeholder="http://151.106.112.32:82"
+            placeholder="http://151.106.112.32:8282"
             onSubmitEditing={() => handleSubmitEndpoint()}
           />
         </Modalize>
