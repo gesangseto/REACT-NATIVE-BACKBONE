@@ -13,7 +13,7 @@ const InputText = React.forwardRef((props, ref) => {
     onChange,
     onSubmitEditing,
   } = props;
-  const [maxLength, setMaxLength] = useState(8);
+  const [maxLength, setMaxLength] = useState();
   const [text, setText] = useState('');
 
   useEffect(() => {

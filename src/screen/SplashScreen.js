@@ -1,19 +1,37 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useRef} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useRef, useState} from 'react';
 import {ImageBackground, StyleSheet, View} from 'react-native';
-import {splash_screen_img} from '../assets';
 import {Modalize} from 'react-native-modalize';
 import {Portal} from 'react-native-portalize';
+import {splash_screen_img} from '../assets';
 import {InputText} from '../component';
 
 const SplashScreen = ({navigation}) => {
   const modalAddApi = useRef(null);
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [endpoint, setEndpoint] = useState('http://151.106.112.32:82');
   useEffect(() => {
-    setTimeout(() => {
-      modalAddApi.current?.open();
-      // navigation.navigate('Login');
-    }, 500);
-  }, [navigation]);
+    if (initialLoad) {
+      setInitialLoad(false);
+      setTimeout(() => {
+        (async function () {
+          let endpoint = await AsyncStorage.getItem('endpoint');
+          if (!endpoint) {
+            modalAddApi.current?.open();
+          } else {
+            navigation.navigate('Login');
+          }
+        })();
+      }, 500);
+    }
+  }, [initialLoad, endpoint]);
+
+  const handleSubmitEndpoint = async () => {
+    modalAddApi.current?.close();
+    await AsyncStorage.setItem('endpoint', `${endpoint}`);
+    navigation.replace('Login');
+  };
 
   return (
     <>
@@ -33,15 +51,15 @@ const SplashScreen = ({navigation}) => {
         <Modalize
           ref={modalAddApi}
           closeOnOverlayTap={false}
-          // closeSnapPointStraightEnabled={false}
-          // modalHeight={isKeyboardOpen ? 400 : 225}
-          // modalHeight={250}
-          // modalStyle={{ backgroundColor: colors.bg.light_grey }}
-        >
+          closeSnapPointStraightEnabled={false}
+          modalHeight={100}>
           <InputText
             title="Endpoint Application"
             required
+            defaultText={endpoint}
+            onChange={val => setEndpoint(val)}
             placeholder="http://151.106.112.32:82"
+            onSubmitEditing={() => handleSubmitEndpoint()}
           />
         </Modalize>
       </Portal>
