@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.absensi">
+  package="com.initial_g.backbone">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
