@@ -1,12 +1,17 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {ImageBackground, StyleSheet, View} from 'react-native';
 import {splash_screen_img} from '../assets';
+import {Modalize} from 'react-native-modalize';
+import {Portal} from 'react-native-portalize';
+import {InputText} from '../component';
 
 const SplashScreen = ({navigation}) => {
+  const modalAddApi = useRef(null);
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('Login');
+      modalAddApi.current?.open();
+      // navigation.navigate('Login');
     }, 500);
   }, [navigation]);
 
@@ -23,6 +28,23 @@ const SplashScreen = ({navigation}) => {
           />
         </View>
       </View>
+
+      <Portal>
+        <Modalize
+          ref={modalAddApi}
+          closeOnOverlayTap={false}
+          // closeSnapPointStraightEnabled={false}
+          // modalHeight={isKeyboardOpen ? 400 : 225}
+          // modalHeight={250}
+          // modalStyle={{ backgroundColor: colors.bg.light_grey }}
+        >
+          <InputText
+            title="Endpoint Application"
+            required
+            placeholder="http://151.106.112.32:82"
+          />
+        </Modalize>
+      </Portal>
     </>
   );
 };
