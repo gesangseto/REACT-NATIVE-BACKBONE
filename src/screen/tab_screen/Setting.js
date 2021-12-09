@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
 import {
   View,
@@ -26,6 +27,11 @@ const Tab = createBottomTabNavigator();
 const Setting = ({route, navigation}) => {
   const [avatar, setAvatar] = useState(avatar_1);
   const [profile, setProfile] = useState({});
+  const handlePressLogout = async () => {
+    await AsyncStorage.removeItem('profile');
+    await AsyncStorage.removeItem('menu');
+    navigation.replace('Login');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -66,7 +72,9 @@ const Setting = ({route, navigation}) => {
             <IconMat name="info" size={20} color={'grey'} />
             <Text>About</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn_card}>
+          <TouchableOpacity
+            style={styles.btn_card}
+            onPress={() => handlePressLogout()}>
             <IconMat name="logout" size={20} color={'grey'} />
             <Text>Logout</Text>
           </TouchableOpacity>

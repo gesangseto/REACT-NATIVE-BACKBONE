@@ -29,3 +29,20 @@ export const loginUser = async ({params, property}) => {
       });
   });
 };
+
+export const getMenu = async ({params, property}) => {
+  let url = `/api/menu/user?section_id=${params.section_id}`;
+  console.log(url);
+  return new Promise(resolve => {
+    $axios
+      .get(`${url}`)
+      .then(result => {
+        return resolve(result.data.data);
+      })
+      .catch(e => {
+        console.log(e);
+        Toaster({message: `${e.message}`, type: 'error'});
+        return resolve(false);
+      });
+  });
+};

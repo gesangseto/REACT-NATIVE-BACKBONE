@@ -1,32 +1,49 @@
 /* eslint-disable prettier/prettier */
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  Image,
+  View,
 } from 'react-native';
-import {
-  avatar_1,
-  avatar_2,
-  avatar_3,
-  avatar_4,
-  avatar_5,
-  avatar_6,
-  avatar_7,
-  avatar_8,
-} from '../../assets';
-import IconMat from 'react-native-vector-icons/MaterialIcons';
 import {SliderBox} from 'react-native-image-slider-box';
+import IconMat from 'react-native-vector-icons/MaterialIcons';
+import {avatar_2, avatar_3, avatar_4} from '../../assets';
+import {getMenu} from '../../resource';
 const Tab = createBottomTabNavigator();
 
 const Home = ({route, navigation}) => {
+  const [initialLoad, setInitialLoad] = useState(true);
   const [dataSlide, setDataSlide] = useState([avatar_2, avatar_3, avatar_4]);
-  useEffect(() => {});
+  const [menu, setMenu] = useState([]);
+  const [profile, setProfile] = useState([]);
+
+  const get_menu = async () => {
+    let _profile = JSON.parse(await AsyncStorage.getItem('profile'));
+    let _menu = await getMenu({params: _profile});
+    await AsyncStorage.setItem('menu', JSON.stringify(_menu));
+    setMenu(_menu);
+    setProfile(_profile);
+  };
+
+  useEffect(() => {
+    if (initialLoad)
+      (async function () {
+        let _menu = await AsyncStorage.getItem('menu');
+        if (!_menu) {
+          get_menu();
+        } else {
+          setMenu(JSON.parse(_menu));
+        }
+        setInitialLoad(false);
+      })();
+    console.log(menu);
+  }, [menu, initialLoad]);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -48,32 +65,37 @@ const Home = ({route, navigation}) => {
           />
         </View>
         {/* CONFIG CARD */}
-        <View style={styles.card}>
-          <View style={styles.card_header}>
-            <Text style={styles.text_header}>Administrator</Text>
-          </View>
-          <View style={styles.card_body}>
-            <TouchableOpacity style={styles.menu_body}>
-              <IconMat name="logout" size={20} color={'grey'} />
-              <Text>User</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menu_body}>
-              <IconMat name="logout" size={20} color={'grey'} />
-              <Text>Department</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menu_body}>
-              <IconMat name="logout" size={20} color={'grey'} />
-              <Text>Section</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.card_body}>
-            <TouchableOpacity style={styles.menu_body}>
-              <IconMat name="logout" size={20} color={'grey'} />
-              <Text>Roles</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* OTHER CARD */}
+
+        {menu &&
+          menu.length > 0 &&
+          menu.map((item, index) => {
+            if (item._tag === 'CSidebarNavDropdown') {
+              return (
+                <View key={index} style={styles.card}>
+                  <View style={styles.card_header}>
+                    <Text style={styles.text_header}>{item.name}</Text>
+                  </View>
+                  <View style={styles.card_body}>
+                    {item._children &&
+                      item._children.length > 0 &&
+                      item._children.map((child, c_index) => {
+                        return (
+                          <TouchableOpacity
+                            key={`${index}${c_index}`}
+                            style={styles.menu_body}
+                            onPress={() => console.log(child.to)}>
+                            <IconMat name="logout" size={20} color={'grey'} />
+                            <Text>{child.name}</Text>
+                          </TouchableOpacity>
+                        );
+                      })}
+                  </View>
+                </View>
+              );
+            } else {
+              return null;
+            }
+          })}
       </ScrollView>
     </SafeAreaView>
   );
@@ -99,7 +121,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   card: {
-    marginBottom: 20,
+    marginVertical: 5,
     marginHorizontal: 5,
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -114,14 +136,15 @@ const styles = StyleSheet.create({
   },
   card_body: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
   menu_body: {
     alignContent: 'center',
     alignItems: 'center',
     width: '30%',
     padding: 5,
-    margin: 5,
+    marginVertical: 2,
     borderRadius: 10,
     elevation: 2,
   },

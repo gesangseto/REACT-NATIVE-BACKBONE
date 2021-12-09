@@ -16,11 +16,14 @@ const SplashScreen = ({navigation}) => {
       setInitialLoad(false);
       setTimeout(() => {
         (async function () {
+          let profile = await AsyncStorage.getItem('profile');
           let endpoint = await AsyncStorage.getItem('endpoint');
           if (!endpoint) {
             modalAddApi.current?.open();
-          } else {
+          } else if (!profile) {
             navigation.navigate('Login');
+          } else {
+            navigation.navigate('MasterHome');
           }
         })();
       }, 500);

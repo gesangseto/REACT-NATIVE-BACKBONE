@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 // <ROOT>/App/Views/Login/LoginView.js
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useRef, useState} from 'react';
 import {
   ImageBackground,
@@ -30,8 +31,12 @@ const Login = ({navigation}) => {
   });
 
   const onPressLogin = async () => {
-    await loginUser({params: parameter});
-    // navigation.navigate('MasterHome');
+    let profile = await loginUser({params: parameter});
+    if (profile) {
+      await AsyncStorage.setItem('profile', JSON.stringify(profile));
+      await AsyncStorage.setItem('token', JSON.stringify(profile.token));
+      navigation.navigate('MasterHome');
+    }
   };
 
   return (
