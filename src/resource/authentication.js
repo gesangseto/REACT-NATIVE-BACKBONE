@@ -1,5 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import $axios from '../Api';
 import {Toaster} from '../utils';
 

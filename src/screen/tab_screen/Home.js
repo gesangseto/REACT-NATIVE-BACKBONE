@@ -19,16 +19,15 @@ const Tab = createBottomTabNavigator();
 
 const Home = ({route, navigation}) => {
   const [initialLoad, setInitialLoad] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [dataSlide, setDataSlide] = useState([avatar_2, avatar_3, avatar_4]);
   const [menu, setMenu] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const get_menu = async () => {
     let _profile = JSON.parse(await AsyncStorage.getItem('profile'));
     let _menu = await getMenu({params: _profile});
     await AsyncStorage.setItem('menu', JSON.stringify(_menu));
     setMenu(_menu);
-    setProfile(_profile);
     return;
   };
 
@@ -49,23 +48,27 @@ const Home = ({route, navigation}) => {
   }, [initialLoad]);
 
   const handlePressMenu = to => {
-    console.log(to);
+    console.log('To: ', to);
+    navigation.navigate(to);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Header
         isLoading={isLoading}
-        useBack={true}
-        onBack={() => console.log('onBack')}
+        // useBack={true}
+        // onBack={() => console.log('onBack')}
         useSearch={true}
+        onSearch={val => console.log(val)}
+        // useSubmit={true}
+        // onSubmit={() => console.log('submit')}
       />
       <ScrollView>
         {/* PROFILE CARD */}
-        <View style={{marginVertical: 5}}>
+        <View style={{marginVertical: 0}}>
           <SliderBox
             images={dataSlide}
-            sliderBoxHeight={150}
+            sliderBoxHeight={120}
             dotColor="#FFEE58"
             inactiveDotColor="#90A4AE"
             autoplay
@@ -94,13 +97,22 @@ const Home = ({route, navigation}) => {
                       item._children.length > 0 &&
                       item._children.map((child, c_index) => {
                         return (
-                          <TouchableOpacity
-                            key={`${index}${c_index}`}
-                            style={styles.menu_body}
-                            onPress={() => handlePressMenu(child.to)}>
-                            <IconMat name="logout" size={20} color={'grey'} />
-                            <Text>{child.name}</Text>
-                          </TouchableOpacity>
+                          <View
+                            key={`${index}.${c_index}`}
+                            style={styles.menu_body}>
+                            <TouchableOpacity
+                              style={styles.menu}
+                              onPress={() => handlePressMenu(child.to)}>
+                              <IconMat
+                                name={child.icon_android}
+                                size={20}
+                                color={'grey'}
+                              />
+                            </TouchableOpacity>
+                            <Text style={{fontSize: 10, color: 'black'}}>
+                              {child.name}
+                            </Text>
+                          </View>
                         );
                       })}
                   </View>
@@ -120,6 +132,7 @@ export default React.memo(Home);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   imageContainer: {
     alignItems: 'center',
@@ -139,7 +152,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
-    elevation: 1,
+    // elevation: 1,
     backgroundColor: 'white',
   },
   card_header: {
@@ -152,16 +165,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
-  menu_body: {
+  menu: {
     alignContent: 'center',
     alignItems: 'center',
-    width: '30%',
+    width: '100%',
     padding: 5,
     marginVertical: 2,
     borderRadius: 10,
-    elevation: 2,
+    // elevation: 2,
+    borderColor: 'black',
+    borderWidth: 1,
+  },
+  menu_body: {
+    alignContent: 'center',
+    alignItems: 'center',
+    width: '22%',
   },
   text_header: {
     fontWeight: 'bold',
+    color: 'black',
   },
 });

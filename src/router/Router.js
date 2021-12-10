@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from '../screen/SplashScreen';
 import Login from '../screen/Login';
 import MasterHome from '../screen/MasterHome';
+import {User, FormUser} from '../screen/administrator/user';
 const Stack = createStackNavigator();
 const Router = () => {
   return (
@@ -22,6 +23,17 @@ const Router = () => {
       <Stack.Screen
         name="MasterHome"
         component={MasterHome}
+        options={{headerShown: false}}
+      />
+      {/* Administrator */}
+      <Stack.Screen
+        name="/administrator/user"
+        component={User}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="/administrator/user/manage"
+        component={FormUser}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

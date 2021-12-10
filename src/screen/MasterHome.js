@@ -20,7 +20,7 @@ const MasterHome = ({route, navigation}) => {
               return (
                 <IconMat
                   name="home"
-                  size={focused ? 35 : 30}
+                  size={focused ? 30 : 25}
                   color={focused ? 'blue' : 'grey'}
                 />
               );
@@ -39,7 +39,7 @@ const MasterHome = ({route, navigation}) => {
             return (
               <IconMat
                 name="calendar-today"
-                size={focused ? 35 : 30}
+                size={focused ? 30 : 25}
                 color={focused ? 'blue' : 'grey'}
               />
             );
@@ -54,8 +54,8 @@ const MasterHome = ({route, navigation}) => {
             tabBarIcon: ({size, focused, color}) => {
               return (
                 <IconMat
-                  name="app-settings-alt"
-                  size={focused ? 35 : 30}
+                  name="tune"
+                  size={focused ? 30 : 25}
                   color={focused ? 'blue' : 'grey'}
                 />
               );
