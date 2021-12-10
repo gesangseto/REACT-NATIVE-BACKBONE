@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
@@ -14,13 +14,14 @@ import {SliderBox} from 'react-native-image-slider-box';
 import IconMat from 'react-native-vector-icons/MaterialIcons';
 import {avatar_2, avatar_3, avatar_4} from '../../assets';
 import {getMenu} from '../../resource';
+import {Header} from '../../component';
 const Tab = createBottomTabNavigator();
 
 const Home = ({route, navigation}) => {
   const [initialLoad, setInitialLoad] = useState(true);
   const [dataSlide, setDataSlide] = useState([avatar_2, avatar_3, avatar_4]);
   const [menu, setMenu] = useState([]);
-  const [profile, setProfile] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const get_menu = async () => {
     let _profile = JSON.parse(await AsyncStorage.getItem('profile'));
@@ -28,24 +29,37 @@ const Home = ({route, navigation}) => {
     await AsyncStorage.setItem('menu', JSON.stringify(_menu));
     setMenu(_menu);
     setProfile(_profile);
+    return;
   };
 
   useEffect(() => {
     if (initialLoad)
       (async function () {
+        setIsLoading(true);
         let _menu = await AsyncStorage.getItem('menu');
         if (!_menu) {
-          get_menu();
+          await get_menu();
         } else {
           setMenu(JSON.parse(_menu));
         }
+        setIsLoading(false);
         setInitialLoad(false);
       })();
-    console.log(menu);
-  }, [menu, initialLoad]);
+    // console.log(menu);
+  }, [initialLoad]);
+
+  const handlePressMenu = to => {
+    console.log(to);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header
+        isLoading={isLoading}
+        useBack={true}
+        onBack={() => console.log('onBack')}
+        useSearch={true}
+      />
       <ScrollView>
         {/* PROFILE CARD */}
         <View style={{marginVertical: 5}}>
@@ -83,7 +97,7 @@ const Home = ({route, navigation}) => {
                           <TouchableOpacity
                             key={`${index}${c_index}`}
                             style={styles.menu_body}
-                            onPress={() => console.log(child.to)}>
+                            onPress={() => handlePressMenu(child.to)}>
                             <IconMat name="logout" size={20} color={'grey'} />
                             <Text>{child.name}</Text>
                           </TouchableOpacity>
@@ -106,7 +120,6 @@ export default React.memo(Home);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10,
   },
   imageContainer: {
     alignItems: 'center',

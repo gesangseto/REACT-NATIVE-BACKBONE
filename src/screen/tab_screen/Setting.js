@@ -27,6 +27,7 @@ const Tab = createBottomTabNavigator();
 const Setting = ({route, navigation}) => {
   const [avatar, setAvatar] = useState(avatar_1);
   const [profile, setProfile] = useState({});
+
   const handlePressLogout = async () => {
     await AsyncStorage.removeItem('profile');
     await AsyncStorage.removeItem('menu');
