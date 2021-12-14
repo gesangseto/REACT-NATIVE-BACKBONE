@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, TouchableOpacity, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Text,
+} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -46,6 +52,11 @@ const Header = props => {
               <IconMat name="arrow-left" size={25} color={'black'} />
             </TouchableOpacity>
           )}
+          {props.headerTitle && (
+            <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>
+              {props.headerTitle}
+            </Text>
+          )}
           {props.useSearch && (
             <View style={styles.search_section}>
               <TextInput
@@ -84,6 +95,7 @@ const styles = StyleSheet.create({
   container: {
     height: 45,
     padding: 3,
+    justifyContent: 'center',
   },
   body: {
     // backgroundColor: 'blue',

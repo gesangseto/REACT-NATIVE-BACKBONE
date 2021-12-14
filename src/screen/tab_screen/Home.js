@@ -23,7 +23,7 @@ const Home = ({route, navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataSlide, setDataSlide] = useState([avatar_2, avatar_3, avatar_4]);
   const [menu, setMenu] = useState([]);
-  const [isFocused, setIsFocus] = useState(false);
+  const [isFocused, setIsFocus] = useState(navigation.isFocused());
 
   const get_menu = async () => {
     let _profile = JSON.parse(await AsyncStorage.getItem('profile'));
@@ -34,7 +34,7 @@ const Home = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    if (initialLoad)
+    if (initialLoad) {
       (async function () {
         setIsLoading(true);
         let _menu = await AsyncStorage.getItem('menu');
@@ -46,15 +46,9 @@ const Home = ({route, navigation}) => {
         setIsLoading(false);
         setInitialLoad(false);
       })();
-    let focusListener = navigation.addListener('focus', () => {
-      setIsFocus(true);
-      // The screen is focused
-      // Call any action
-    });
-
-    // return focusListener;
-    // console.log(menu);
-  }, [initialLoad, isFocused]);
+    }
+    setIsFocus(navigation.isFocused());
+  }, [initialLoad, isFocused, navigation]);
 
   const handlePressMenu = to => {
     console.log('To: ', to);

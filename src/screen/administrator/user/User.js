@@ -37,9 +37,15 @@ const User = ({route, navigation}) => {
         useSearch={true}
         onSearch={val => console.log(val)}
         useAdd={true}
-        onAdd={() => console.log('Add')}
+        onAdd={val =>
+          navigation.navigate('/administrator/user/form', {item: val})
+        }
       />
-      <ListViewSwipe data={listData}></ListViewSwipe>
+      <ListViewSwipe
+        data={listData}
+        onPress={val =>
+          navigation.navigate('/administrator/user/form', {item: val})
+        }></ListViewSwipe>
     </SafeAreaView>
   );
 };

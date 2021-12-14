@@ -1,84 +1,80 @@
 /* eslint-disable prettier/prettier */
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import {
-  avatar_1,
-  avatar_2,
-  avatar_3,
-  avatar_4,
-  avatar_5,
-  avatar_6,
-  avatar_7,
-  avatar_8,
-} from '../../../assets';
-import IconMat from 'react-native-vector-icons/MaterialIcons';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, {useEffect, useState} from 'react';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {avatar_1} from '../../../assets';
+import {Header, InputText} from '../../../component';
 const Tab = createBottomTabNavigator();
 
 const FormUser = ({route, navigation}) => {
+  // const route = useRoute();
+  const body = route.params.item;
   const [avatar, setAvatar] = useState(avatar_1);
   const [profile, setProfile] = useState({});
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [listData, setListData] = useState([]);
+  const [param, setParam] = useState(body ?? {});
 
   const handlePressLogout = async () => {
     await AsyncStorage.removeItem('profile');
     await AsyncStorage.removeItem('menu');
     navigation.replace('Login');
   };
+
+  const get_data = async () => {
+    let _data = await getUser({params: param});
+    setListData(_data);
+    return;
+  };
+  useEffect(() => {
+    console.log(param);
+  }, [initialLoad]);
+
   return (
     <SafeAreaView style={styles.container}>
+      <Header
+        isLoading={isLoading}
+        headerTitle={'USER'}
+        useBack={true}
+        onBack={() => navigation.goBack()}
+        useSubmit={true}
+        onSubmit={() => console.log('Submit')}
+      />
       <ScrollView>
         {/* PROFILE CARD */}
         <View style={styles.card}>
-          <View style={styles.imageContainer}>
-            {avatar != '' && (
-              <Image style={styles.imageAvatar} source={avatar} />
-            )}
-          </View>
-          <View style={styles.list_card}>
-            <Text>Fullname</Text>
-            <Text>Gesang Aji Seto</Text>
-          </View>
-          <View style={styles.list_card}>
-            <Text>Email</Text>
-            <Text>gesangseto@gmail.com</Text>
-          </View>
-          <View style={styles.list_card}>
-            <Text>Phone</Text>
-            <Text>0821 2222 2657</Text>
-          </View>
-        </View>
-        {/* CONFIG CARD */}
-        <View style={styles.card}>
-          <View style={styles.list_card}>
-            <Text>App Name</Text>
-            <Text>BACK BONE</Text>
-          </View>
-          <View style={styles.list_card}>
-            <Text>Owner</Text>
-            <Text>PT. TI ATI</Text>
-          </View>
-        </View>
-        {/* OTHER CARD */}
-        <View style={styles.card}>
-          <TouchableOpacity style={styles.btn_card}>
-            <IconMat name="info" size={20} color={'grey'} />
-            <Text>About</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn_card}
-            onPress={() => handlePressLogout()}>
-            <IconMat name="logout" size={20} color={'grey'} />
-            <Text>Logout</Text>
-          </TouchableOpacity>
+          <InputText
+            title="Name"
+            defaultText={param.user_name}
+            onChange={val => setParam({...param, user_name: val})}
+          />
+          <InputText
+            title="Email"
+            defaultText={param.user_email}
+            onChange={val => setParam({...param, user_email: val})}
+          />
+          <InputText
+            title="Password"
+            defaultText={param.user_password}
+            onChange={val => setParam({...param, user_password: val})}
+          />
+          <InputText
+            title="Department"
+            defaultText={param.department_name}
+            onChange={val => setParam({...param, department_name: val})}
+          />
+          <InputText
+            title="Section"
+            defaultText={param.section_name}
+            onChange={val => setParam({...param, section_name: val})}
+          />
+          <InputText
+            title="Status"
+            defaultText={param.status}
+            onChange={val => setParam({...param, status: val})}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -90,7 +86,6 @@ export default React.memo(FormUser);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10,
   },
   imageContainer: {
     alignItems: 'center',
@@ -106,11 +101,7 @@ const styles = StyleSheet.create({
   },
   card: {
     marginBottom: 20,
-    marginHorizontal: 15,
     paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    elevation: 1,
     backgroundColor: 'white',
   },
   list_card: {

@@ -32,7 +32,7 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="/administrator/user/manage"
+        name="/administrator/user/form"
         component={FormUser}
         options={{headerShown: false}}
       />

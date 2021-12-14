@@ -1,11 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, View, Image} from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+} from 'react-native';
 import {avatar_1} from '../../assets';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const ListViewSwipe = props => {
-  const {data, onDelete} = props;
+  const {data, onDelete, onPress} = props;
   useEffect(() => {}, []);
 
   const handlePressDelete = item => {
@@ -14,26 +22,34 @@ const ListViewSwipe = props => {
     }
     console.log('Delete', item);
   };
+  const handlePressList = item => {
+    if (onPress) {
+      onPress(item);
+    }
+    console.log('onPress', item);
+  };
 
   const renderItem = (item, rowMap) => (
-    <View style={styles.container_list}>
-      <Image style={styles.image} source={avatar_1} />
-      <View style={styles.container_text}>
-        <Text style={{color: 'black', fontSize: 18, fontWeight: 'bold'}}>
-          {item.user_email}
-        </Text>
-        <Text style={{color: 'black', fontSize: 14, fontWeight: 'normal'}}>
-          {item.user_name}
-        </Text>
-        <Text>{item.section_name}</Text>
-        <Text>{item.department_name}</Text>
-        {item.status ? (
-          <Text style={{color: 'green'}}>Active</Text>
-        ) : (
-          <Text style={{color: 'red'}}>Inactive</Text>
-        )}
+    <TouchableHighlight onPress={() => handlePressList(item)}>
+      <View style={styles.container_list}>
+        <Image style={styles.image} source={avatar_1} />
+        <View style={styles.container_text}>
+          <Text style={{color: 'black', fontSize: 18, fontWeight: 'bold'}}>
+            {item.user_email}
+          </Text>
+          <Text style={{color: 'black', fontSize: 14, fontWeight: 'normal'}}>
+            {item.user_name}
+          </Text>
+          <Text>{item.section_name}</Text>
+          <Text>{item.department_name}</Text>
+          {item.status ? (
+            <Text style={{color: 'green'}}>Active</Text>
+          ) : (
+            <Text style={{color: 'red'}}>Inactive</Text>
+          )}
+        </View>
       </View>
-    </View>
+    </TouchableHighlight>
   );
 
   const renderHiddenItem = (item, rowMap) => (
