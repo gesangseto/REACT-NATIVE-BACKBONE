@@ -18,7 +18,11 @@ const ListView = props => {
         </Text>
         <Text>{item.section_name}</Text>
         <Text>{item.department_name}</Text>
-        {/* {item.status && <Text>{item.status}</Text>} */}
+        {item.status ? (
+          <Text style={{color: 'green'}}>Active</Text>
+        ) : (
+          <Text style={{color: 'red'}}>Inactive</Text>
+        )}
       </View>
     </View>
   );

@@ -1,19 +1,8 @@
 /* eslint-disable prettier/prettier */
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useState, useEffect} from 'react';
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import IconMat from 'react-native-vector-icons/MaterialIcons';
-import {avatar_1} from '../../../assets';
-import {Header, ListView} from '../../../component';
+import React, {useEffect, useState} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {Header, ListView, ListViewSwipe} from '../../../component';
 import {getUser} from '../../../resource';
 const Tab = createBottomTabNavigator();
 
@@ -50,7 +39,7 @@ const User = ({route, navigation}) => {
         useAdd={true}
         onAdd={() => console.log('Add')}
       />
-      <ListView data={listData}></ListView>
+      <ListViewSwipe data={listData}></ListViewSwipe>
     </SafeAreaView>
   );
 };

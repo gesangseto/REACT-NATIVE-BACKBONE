@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {SliderBox} from 'react-native-image-slider-box';
 import IconMat from 'react-native-vector-icons/MaterialIcons';
 import {avatar_2, avatar_3, avatar_4} from '../../assets';
@@ -22,6 +23,7 @@ const Home = ({route, navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataSlide, setDataSlide] = useState([avatar_2, avatar_3, avatar_4]);
   const [menu, setMenu] = useState([]);
+  const [isFocused, setIsFocus] = useState(false);
 
   const get_menu = async () => {
     let _profile = JSON.parse(await AsyncStorage.getItem('profile'));
@@ -44,8 +46,15 @@ const Home = ({route, navigation}) => {
         setIsLoading(false);
         setInitialLoad(false);
       })();
+    let focusListener = navigation.addListener('focus', () => {
+      setIsFocus(true);
+      // The screen is focused
+      // Call any action
+    });
+
+    // return focusListener;
     // console.log(menu);
-  }, [initialLoad]);
+  }, [initialLoad, isFocused]);
 
   const handlePressMenu = to => {
     console.log('To: ', to);
@@ -71,7 +80,7 @@ const Home = ({route, navigation}) => {
             sliderBoxHeight={120}
             dotColor="#FFEE58"
             inactiveDotColor="#90A4AE"
-            autoplay
+            autoplay={isFocused}
             circleLoop
             onCurrentImagePressed={index =>
               console.log(`image ${index} pressed`)
