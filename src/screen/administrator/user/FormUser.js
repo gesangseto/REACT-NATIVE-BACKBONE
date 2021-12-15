@@ -1,35 +1,46 @@
 /* eslint-disable prettier/prettier */
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import {avatar_1} from '../../../assets';
-import {Header, InputText} from '../../../component';
+import {Header, InputText, SelectOption} from '../../../component';
+import {getDepartment} from '../../../resource';
 const Tab = createBottomTabNavigator();
 
 const FormUser = ({route, navigation}) => {
   // const route = useRoute();
   const body = route.params.item;
-  const [avatar, setAvatar] = useState(avatar_1);
-  const [profile, setProfile] = useState({});
   const [initialLoad, setInitialLoad] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [listData, setListData] = useState([]);
   const [param, setParam] = useState(body ?? {});
+  const [listSection, setListSection] = useState([]);
+  const [listDepartment, setListDepartment] = useState([]);
 
-  const handlePressLogout = async () => {
-    await AsyncStorage.removeItem('profile');
-    await AsyncStorage.removeItem('menu');
-    navigation.replace('Login');
+  const getListDepartment = async () => {
+    console.log('tessadat');
+    let _temp = await getDepartment({});
+    console.log('===========================');
+    console.log(_temp);
+    if (_temp) {
+      let _data = [];
+      for (const it of _temp) {
+        _data.push({
+          id: it.department_id,
+          label: it.department_name,
+        });
+      }
+      setListDepartment([..._data]);
+    }
   };
-
-  const get_data = async () => {
-    let _data = await getUser({params: param});
-    setListData(_data);
-    return;
-  };
+  // const getListSection = async () => {
+  //   await getSection();
+  // };
   useEffect(() => {
-    console.log(param);
+    if (initialLoad && listDepartment.length == 0) {
+      (async function () {
+        getListDepartment();
+      })();
+    }
+    console.log('test');
   }, [initialLoad]);
 
   return (
@@ -64,6 +75,13 @@ const FormUser = ({route, navigation}) => {
             title="Department"
             defaultText={param.department_name}
             onChange={val => setParam({...param, department_name: val})}
+          />
+          <SelectOption
+            required
+            selected={param.department_id}
+            options={listDepartment}
+            title="Department"
+            onChange={val => console.log(val)}
           />
           <InputText
             title="Section"
