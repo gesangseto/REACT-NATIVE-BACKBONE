@@ -1,37 +1,42 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import SelectPicker from 'react-native-form-select-picker'; // Import the package
 function SelectOption(props) {
-  const {onChange, options, title, selected, required, readonly} = props;
-  const [select, setSelect] = useState(selected);
-  const [isRead, setIsRead] = useState(readonly ? true : false);
+  const {onChange} = props;
+  const [list, setList] = useState([]);
+  const [selectedData, setSelectedData] = useState(null);
 
   const handleChange = val => {
-    setSelect(val);
-    onChange(val);
+    setSelectedData(val);
+    if (onChange) {
+      onChange(val);
+    }
   };
+
+  useEffect(() => {
+    if (list.length == 0 && props.options.length > 0) {
+      setList(props.options);
+    } else if (props.selected) {
+      setSelectedData(props.selected);
+    }
+    console.log('Selected ', selectedData);
+  }, [props, list, selectedData]);
 
   return (
     <View>
       <Text style={styles.title}>
-        {title} <Text style={{color: 'red'}}>{required ? ' *' : ''}</Text>
+        {props.title}
+        <Text style={{color: 'red'}}>{props.required ? ' *' : ''}</Text>
       </Text>
       <SelectPicker
-        // containerStyle={{ backgroundColor: "gray" }}
-        doneButtonTextStyle={{
-          textAlign: 'center',
-          color: 'black',
-          fontWeight: 'bold',
-          fontSize: 14,
-        }}
-        disabled={isRead}
-        selected={parseInt(select)}
+        style={styles.content}
+        disabled={props.isRead}
+        selected={list.length > 0 && selectedData ? selectedData : null}
         onValueChange={value => {
           handleChange(value);
         }}
-        placeholder={'--Select--'}
-        style={styles.content}>
-        {Object.values(options).map((val, index) => (
+        placeholder={'--Select--'}>
+        {Object.values(list).map((val, index) => (
           <SelectPicker.Item label={val.label} value={val.id} key={index + 1} />
         ))}
       </SelectPicker>
@@ -58,7 +63,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     marginHorizontal: 15,
     marginTop: 5,
-    borderRadius: 10,
-    // borderWidth: 1,
+    borderRadius: 2,
+    borderWidth: 0.2,
   },
 });

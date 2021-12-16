@@ -74,13 +74,12 @@ const styles = StyleSheet.create({
   },
   content: {
     height: 40,
-    backgroundColor: '#f7f7f7',
     shadowColor: '#000000',
     shadowOpacity: 0.8,
     shadowRadius: 2,
     marginHorizontal: 15,
     marginTop: 10,
-    borderRadius: 10,
-    borderWidth: 0,
+    borderRadius: 2,
+    borderWidth: 0.2,
   },
 });

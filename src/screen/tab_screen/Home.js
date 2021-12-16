@@ -79,9 +79,9 @@ const Home = ({route, navigation}) => {
             onCurrentImagePressed={index =>
               console.log(`image ${index} pressed`)
             }
-            currentImageEmitter={index =>
-              console.log(`current pos is: ${index}`)
-            }
+            // currentImageEmitter={index =>
+            //   console.log(`current pos is: ${index}`)
+            // }
           />
         </View>
         {/* CONFIG CARD */}

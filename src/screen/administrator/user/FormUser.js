@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import {Header, InputText, SelectOption} from '../../../component';
-import {getDepartment} from '../../../resource';
+import {getDepartment, getSection} from '../../../resource';
 const Tab = createBottomTabNavigator();
 
 const FormUser = ({route, navigation}) => {
@@ -15,11 +15,8 @@ const FormUser = ({route, navigation}) => {
   const [listSection, setListSection] = useState([]);
   const [listDepartment, setListDepartment] = useState([]);
 
-  const getListDepartment = async () => {
-    console.log('tessadat');
-    let _temp = await getDepartment({});
-    console.log('===========================');
-    console.log(_temp);
+  const getListDepartment = async data => {
+    let _temp = await getDepartment({param: data});
     if (_temp) {
       let _data = [];
       for (const it of _temp) {
@@ -31,16 +28,34 @@ const FormUser = ({route, navigation}) => {
       setListDepartment([..._data]);
     }
   };
-  // const getListSection = async () => {
-  //   await getSection();
-  // };
+
+  const getListSection = async data => {
+    let _temp = await getSection({param: data});
+    if (_temp) {
+      let _data = [];
+      for (const it of _temp) {
+        _data.push({
+          id: it.section_id,
+          label: it.section_name,
+        });
+      }
+      setListSection([..._data]);
+    }
+  };
+
   useEffect(() => {
-    if (initialLoad && listDepartment.length == 0) {
+    if (initialLoad) {
+      setInitialLoad(false);
       (async function () {
         getListDepartment();
       })();
+      if (Object.keys(param).length > 0) {
+        (async function () {
+          getListSection({section_id: param.section_id});
+        })();
+      }
     }
-    console.log('test');
+    console.log('==================');
   }, [initialLoad]);
 
   return (
@@ -71,11 +86,6 @@ const FormUser = ({route, navigation}) => {
             defaultText={param.user_password}
             onChange={val => setParam({...param, user_password: val})}
           />
-          <InputText
-            title="Department"
-            defaultText={param.department_name}
-            onChange={val => setParam({...param, department_name: val})}
-          />
           <SelectOption
             required
             selected={param.department_id}
@@ -83,10 +93,12 @@ const FormUser = ({route, navigation}) => {
             title="Department"
             onChange={val => console.log(val)}
           />
-          <InputText
+          <SelectOption
+            required
+            selected={param.section_id}
+            options={listSection}
             title="Section"
-            defaultText={param.section_name}
-            onChange={val => setParam({...param, section_name: val})}
+            onChange={val => console.log(val)}
           />
           <InputText
             title="Status"
@@ -99,7 +111,7 @@ const FormUser = ({route, navigation}) => {
   );
 };
 
-export default React.memo(FormUser);
+export default FormUser;
 
 const styles = StyleSheet.create({
   container: {
