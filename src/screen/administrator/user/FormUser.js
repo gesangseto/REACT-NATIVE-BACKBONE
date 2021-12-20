@@ -3,7 +3,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import {Header, InputText, SelectOption, Switch} from '../../../component';
-import {getDepartment, getSection} from '../../../resource';
+import {
+  getDepartment,
+  getSection,
+  insertUser,
+  updateUser,
+} from '../../../resource';
 const Tab = createBottomTabNavigator();
 
 const FormUser = ({route, navigation}) => {
@@ -49,6 +54,21 @@ const FormUser = ({route, navigation}) => {
     let query = {department_id: val};
     getListSection(query);
   };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    let result = {};
+    if (param.user_id) {
+      result = await updateUser({params: param});
+    } else {
+      result = await insertUser({params: param});
+    }
+    setIsLoading(false);
+    if (result.error == false) {
+      navigation.goBack();
+    }
+  };
+
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
@@ -61,7 +81,7 @@ const FormUser = ({route, navigation}) => {
         })();
       }
     }
-  }, [initialLoad]);
+  }, [initialLoad, param]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -71,7 +91,7 @@ const FormUser = ({route, navigation}) => {
         useBack={true}
         onBack={() => navigation.goBack()}
         useSubmit={true}
-        onSubmit={() => console.log('Submit')}
+        onSubmit={() => handleSubmit()}
       />
       <ScrollView>
         {/* PROFILE CARD */}
@@ -103,7 +123,7 @@ const FormUser = ({route, navigation}) => {
             selected={param.section_id}
             options={listSection}
             title="Section"
-            onChange={val => console.log(val)}
+            onChange={val => setParam({...param, section_id: val})}
           />
           <Switch
             title="Status"

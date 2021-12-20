@@ -22,6 +22,7 @@ const User = ({route, navigation}) => {
     console.log(item);
     setIsLoading(true);
     await deleteUser({params: item});
+    await get_data();
     setIsLoading(false);
   };
 
@@ -33,8 +34,17 @@ const User = ({route, navigation}) => {
         setIsLoading(false);
         setInitialLoad(false);
       })();
-    // console.log(menu);
-  }, [initialLoad]);
+
+    const willFocusSubscription = navigation.addListener('focus', () => {
+      (async function () {
+        setIsLoading(true);
+        await get_data();
+        setIsLoading(false);
+        setInitialLoad(false);
+      })();
+    });
+    return willFocusSubscription;
+  }, [initialLoad, navigation]);
 
   return (
     <SafeAreaView style={styles.container}>
