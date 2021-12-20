@@ -17,3 +17,22 @@ export const getUser = async ({params, property}) => {
       });
   });
 };
+export const deleteUser = async ({params, property}) => {
+  let url = `/api/master/user`;
+  let body = {data: params};
+  console.log(url, body);
+  return new Promise(resolve => {
+    $axios
+      .delete(url, body)
+      .then(result => {
+        let res = result.data;
+        Toaster({message: `${res.message}`, type: res.error});
+        return resolve(true);
+      })
+      .catch(e => {
+        console.log(e);
+        Toaster({message: `${e.message}`, type: 'error'});
+        return resolve(false);
+      });
+  });
+};

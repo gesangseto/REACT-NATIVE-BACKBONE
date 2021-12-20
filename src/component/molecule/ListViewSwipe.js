@@ -11,17 +11,27 @@ import {
 import {avatar_1} from '../../assets';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ModalAlert} from '..';
 
 const ListViewSwipe = props => {
   const {data, onDelete, onPress} = props;
+  const [selectedData, setSelectedData] = useState({});
+
+  const [alertDelete, setAlertDelete] = useState(false);
+
   useEffect(() => {}, []);
 
   const handlePressDelete = item => {
-    if (onDelete) {
-      onDelete(item);
-    }
-    console.log('Delete', item);
+    setSelectedData(item);
+    setAlertDelete(true);
   };
+  const handleConfirmDelete = () => {
+    setAlertDelete(!alertDelete);
+    if (onDelete) {
+      onDelete(selectedData);
+    }
+  };
+
   const handlePressList = item => {
     if (onPress) {
       onPress(item);
@@ -77,6 +87,10 @@ const ListViewSwipe = props => {
         leftOpenValue={75}
         // rightOpenValue={-75}
       />
+      <ModalAlert
+        show={alertDelete}
+        onConfirm={() => handleConfirmDelete()}
+        onClose={() => setAlertDelete(!alertDelete)}></ModalAlert>
     </View>
   );
 };

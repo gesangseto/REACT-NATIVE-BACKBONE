@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {Header, ListView, ListViewSwipe} from '../../../component';
-import {getUser} from '../../../resource';
+import {deleteUser, getUser} from '../../../resource';
 const Tab = createBottomTabNavigator();
 
 const User = ({route, navigation}) => {
@@ -17,6 +17,14 @@ const User = ({route, navigation}) => {
     setListData(_data);
     return;
   };
+
+  const handleDelete = async item => {
+    console.log(item);
+    setIsLoading(true);
+    await deleteUser({params: item});
+    setIsLoading(false);
+  };
+
   useEffect(() => {
     if (initialLoad)
       (async function () {
@@ -43,6 +51,7 @@ const User = ({route, navigation}) => {
       />
       <ListViewSwipe
         data={listData}
+        onDelete={val => handleDelete(val)}
         onPress={val =>
           navigation.navigate('/administrator/user/form', {item: val})
         }></ListViewSwipe>

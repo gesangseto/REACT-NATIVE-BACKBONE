@@ -2,7 +2,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import {Header, InputText, SelectOption} from '../../../component';
+import {Header, InputText, SelectOption, Switch} from '../../../component';
 import {getDepartment, getSection} from '../../../resource';
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +30,8 @@ const FormUser = ({route, navigation}) => {
   };
 
   const getListSection = async data => {
-    let _temp = await getSection({param: data});
+    console.log(data);
+    let _temp = await getSection({params: data});
     if (_temp) {
       let _data = [];
       for (const it of _temp) {
@@ -43,6 +44,11 @@ const FormUser = ({route, navigation}) => {
     }
   };
 
+  const handleChangeDepartment = val => {
+    setParam({...param, department_id: val});
+    let query = {department_id: val};
+    getListSection(query);
+  };
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
@@ -55,7 +61,6 @@ const FormUser = ({route, navigation}) => {
         })();
       }
     }
-    console.log('==================');
   }, [initialLoad]);
 
   return (
@@ -91,7 +96,7 @@ const FormUser = ({route, navigation}) => {
             selected={param.department_id}
             options={listDepartment}
             title="Department"
-            onChange={val => console.log(val)}
+            onChange={val => handleChangeDepartment(val)}
           />
           <SelectOption
             required
@@ -100,11 +105,12 @@ const FormUser = ({route, navigation}) => {
             title="Section"
             onChange={val => console.log(val)}
           />
-          <InputText
+          <Switch
             title="Status"
-            defaultText={param.status}
-            onChange={val => setParam({...param, status: val})}
-          />
+            isOn={param.status}
+            onChange={val =>
+              setParam({...param, status: val ? 1 : 0})
+            }></Switch>
         </View>
       </ScrollView>
     </SafeAreaView>
