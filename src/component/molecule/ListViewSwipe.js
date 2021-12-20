@@ -1,25 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableHighlight,
-  TouchableNativeFeedback,
-} from 'react-native';
-import {avatar_1} from '../../assets';
-import {SwipeListView} from 'react-native-swipe-list-view';
+import {Image, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {SwipeListView} from 'react-native-swipe-list-view';
 import {ModalAlert} from '..';
+import {avatar_1} from '../../assets';
 
 const ListViewSwipe = props => {
-  const {data, onDelete, onPress} = props;
+  const {data, onDelete, onPress, onRefresh, refreshing} = props;
+  const [isLoading, setIsLoading] = useState(refreshing ?? false);
+  const [alertDelete, setAlertDelete] = useState(false);
   const [selectedData, setSelectedData] = useState({});
 
-  const [alertDelete, setAlertDelete] = useState(false);
-
   useEffect(() => {}, []);
+
+  const handleRefresh = () => {
+    if (onRefresh) {
+      onRefresh();
+    }
+  };
 
   const handlePressDelete = item => {
     setSelectedData(item);
@@ -85,7 +83,8 @@ const ListViewSwipe = props => {
         renderItem={(data, rowMap) => renderItem(data.item, rowMap)}
         renderHiddenItem={(data, rowMap) => renderHiddenItem(data.item, rowMap)}
         leftOpenValue={75}
-        // rightOpenValue={-75}
+        onRefresh={() => handleRefresh()}
+        refreshing={isLoading}
       />
       <ModalAlert
         show={alertDelete}

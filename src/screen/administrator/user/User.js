@@ -2,7 +2,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {Header, ListView, ListViewSwipe} from '../../../component';
+import {Header, ListViewSwipe} from '../../../component';
 import {deleteUser, getUser} from '../../../resource';
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +49,6 @@ const User = ({route, navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        isLoading={isLoading}
         useBack={true}
         onBack={() => navigation.goBack()}
         useSearch={true}
@@ -60,6 +59,8 @@ const User = ({route, navigation}) => {
         }
       />
       <ListViewSwipe
+        onRefresh={() => get_data()}
+        refreshing={isLoading}
         data={listData}
         onDelete={val => handleDelete(val)}
         onPress={val =>
