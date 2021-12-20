@@ -77,7 +77,7 @@ const ListViewSwipe = props => {
   );
 
   return (
-    <View>
+    <View style={{paddingBottom: 45}}>
       <SwipeListView
         data={data}
         renderItem={(data, rowMap) => renderItem(data.item, rowMap)}

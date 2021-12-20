@@ -5,6 +5,7 @@ import SplashScreen from '../screen/SplashScreen';
 import Login from '../screen/Login';
 import MasterHome from '../screen/MasterHome';
 import {User, FormUser} from '../screen/administrator/user';
+import {Department, FormDepartment} from '../screen/administrator/department';
 const Stack = createStackNavigator();
 const Router = () => {
   return (
@@ -34,6 +35,17 @@ const Router = () => {
       <Stack.Screen
         name="/administrator/user/form"
         component={FormUser}
+        options={{headerShown: false}}
+      />
+      {/* Department */}
+      <Stack.Screen
+        name="/administrator/department"
+        component={Department}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="/administrator/department/form"
+        component={FormDepartment}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
