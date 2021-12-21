@@ -1,17 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {
+  Image,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+  ScrollView,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {ModalAlert} from '..';
 import {avatar_1} from '../../assets';
 
 const ListViewSwipe = props => {
-  const {data, onDelete, onPress, onRefresh, refreshing} = props;
+  const {data, onDelete, onPress, onRefresh, onLoadMore, refreshing} = props;
   const [isLoading, setIsLoading] = useState(refreshing ?? false);
   const [alertDelete, setAlertDelete] = useState(false);
   const [selectedData, setSelectedData] = useState({});
+  const [offsetY, setOffsetY] = useState(0);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(props.data);
+  }, [props.data]);
 
   const handleRefresh = () => {
     if (onRefresh) {
@@ -76,6 +87,12 @@ const ListViewSwipe = props => {
     </View>
   );
 
+  const handleLoadMore = val => {
+    if (onLoadMore) {
+      onLoadMore();
+    }
+  };
+
   return (
     <View style={{paddingBottom: 45}}>
       <SwipeListView
@@ -83,8 +100,14 @@ const ListViewSwipe = props => {
         renderItem={(data, rowMap) => renderItem(data.item, rowMap)}
         renderHiddenItem={(data, rowMap) => renderHiddenItem(data.item, rowMap)}
         leftOpenValue={75}
-        onRefresh={() => handleRefresh()}
-        refreshing={isLoading}
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => handleRefresh()}
+            refreshing={isLoading}
+          />
+        }
+        onEndReachedThreshold={0.001}
+        onEndReached={info => handleLoadMore(info)}
       />
       <ModalAlert
         show={alertDelete}
