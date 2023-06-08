@@ -3,7 +3,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from '../screen/SplashScreen';
 import Login from '../screen/Login';
-import MasterHome from '../screen/MasterHome';
+import HomePage from '../screen/HomePage';
 import {User, FormUser} from '../screen/administrator/user';
 import {Department, FormDepartment} from '../screen/administrator/department';
 const Stack = createStackNavigator();
@@ -22,8 +22,8 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="MasterHome"
-        component={MasterHome}
+        name="HomePage"
+        component={HomePage}
         options={{headerShown: false}}
       />
       {/* Administrator */}

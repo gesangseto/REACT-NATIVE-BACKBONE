@@ -5,9 +5,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import {Host} from 'react-native-portalize';
 import Toast from 'react-native-toast-notifications';
 import Icon from 'react-native-vector-icons/Octicons';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/integration/react';
-import {persistor, store} from './redux';
 //
 import Router from './router/Router';
 
@@ -79,29 +76,25 @@ const App = () => {
   };
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Host>
-          <NavigationContainer>
-            <Router />
-            {/* <Spinner
+    <Host>
+      <NavigationContainer>
+        <Router />
+        {/* <Spinner
               visible={true}
               textContent={'Loading...'}
               textStyle={{color: '#FFF'}}
             /> */}
-            <Toast
-              ref={ref => (global['toast'] = ref)}
-              offset={'45%'} // offset for both top and bottom toasts
-              duration={2000}
-              animationDuration={0}
-              placement="bottom"
-              animationType="zoom-in"
-              renderToast={toastOptions => handleRenderToast(toastOptions)}
-            />
-          </NavigationContainer>
-        </Host>
-      </PersistGate>
-    </Provider>
+        <Toast
+          ref={ref => (global['toast'] = ref)}
+          offset={'45%'} // offset for both top and bottom toasts
+          duration={2000}
+          animationDuration={0}
+          placement="bottom"
+          animationType="zoom-in"
+          renderToast={toastOptions => handleRenderToast(toastOptions)}
+        />
+      </NavigationContainer>
+    </Host>
   );
 };
 

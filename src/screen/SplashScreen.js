@@ -23,7 +23,7 @@ const SplashScreen = ({navigation}) => {
           } else if (!profile) {
             navigation.navigate('Login');
           } else {
-            navigation.navigate('MasterHome');
+            navigation.navigate('HomePage');
           }
         })();
       }, 500);

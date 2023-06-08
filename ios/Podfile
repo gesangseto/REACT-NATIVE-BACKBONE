@@ -12,7 +12,6 @@ target 'BackBone' do
     :hermes_enabled => false
   )
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'BackBoneTests' do
     inherit! :complete
@@ -25,8 +24,17 @@ target 'BackBone' do
   # you should disable the next line.
   use_flipper!()
 
+  IOS_VERSION = '11.0'
   post_install do |installer|
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    # target.build_configurations.each do |config|
+    #   config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = IOS_VERSION
+    #   config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    #   config.build_settings["ONLY_ACTIVE_ARCH"] = "YES"
+    # end
+    `sed -i -e  $'s/__IPHONE_10_0/__IPHONE_12_0/' Pods/RCT-Folly/folly/portability/Time.h`
+
   end
+
 end

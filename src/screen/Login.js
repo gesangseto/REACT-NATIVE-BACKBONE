@@ -31,12 +31,12 @@ const Login = ({navigation}) => {
   });
 
   const onPressLogin = async () => {
-    let profile = await loginUser({params: parameter});
-    if (profile) {
-      await AsyncStorage.setItem('profile', JSON.stringify(profile));
-      await AsyncStorage.setItem('token', JSON.stringify(profile.token));
-      navigation.navigate('MasterHome');
-    }
+    // let profile = await loginUser({params: parameter});
+    // if (profile) {
+    //   await AsyncStorage.setItem('profile', JSON.stringify(profile));
+    //   await AsyncStorage.setItem('token', JSON.stringify(profile.token));
+    navigation.navigate('HomePage');
+    // }
   };
 
   return (
